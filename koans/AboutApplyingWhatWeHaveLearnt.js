@@ -1,4 +1,5 @@
 var _; //globals
+var ing;
 
 describe('About Applying What We Have Learnt', function() {
     var products;
@@ -65,8 +66,19 @@ describe('About Applying What We Have Learnt', function() {
         var productsICanEat = [];
 
         /* solve using filter() & all() / any() */
+        productsICanEat = _(products)
+            .chain()
+            .filter(function(p) {
+                return (
+                    p.containsNuts === false &&
+                    !_(p.ingredients).any(function(i) {
+                        return i === 'mushrooms';
+                    })
+                );
+            })
+            .value();
 
-        expect(productsICanEat.length).toBe(FILL_ME_IN);
+        expect(productsICanEat.length).toBe(1);
     });
 
     /*********************************************************************************/
@@ -79,13 +91,15 @@ describe('About Applying What We Have Learnt', function() {
             }
         }
 
-        expect(sum).toBe(FILL_ME_IN);
+        expect(sum).toBe(233168);
     });
 
     it('should add all the natural numbers below 1000 that are multiples of 3 or 5 (functional)', function() {
-        var sum = FILL_ME_IN; /* try chaining range() and reduce() */
+        var sum = _.range(1, 1000).reduce(function(total, n) {
+            return (total += n % 3 === 0 || n % 5 === 0 ? n : 0);
+        }, 0); /* try chaining range() and reduce() */
 
-        expect(233168).toBe(FILL_ME_IN);
+        expect(233168).toBe(sum);
     });
 
     /*********************************************************************************/
@@ -99,15 +113,26 @@ describe('About Applying What We Have Learnt', function() {
             }
         }
 
-        expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+        expect(ingredientCount['mushrooms']).toBe(2);
     });
 
     it('should count the ingredient occurrence (functional)', function() {
         var ingredientCount = { '{ingredient name}': 0 };
 
         /* chain() together map(), flatten() and reduce() */
-
-        expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+        ingredientCount = _(products)
+            .chain()
+            .map(function(p) {
+                return p.ingredients;
+            })
+            .flatten()
+            .reduce(function(total, elem) {
+                total[elem] = (total[elem] || 0) + 1;
+                return total;
+            }, {})
+            .value();
+        // ing = ingredientCount;
+        expect(ingredientCount['mushrooms']).toBe(2);
     });
 
     /*********************************************************************************/
